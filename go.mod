@@ -1,4 +1,4 @@
-module AzBlobStorage
+module github.com/morganleroi/AzBlobStorage
 
 go 1.18
 
