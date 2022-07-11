@@ -9,7 +9,7 @@ func main() {
 	deployPackage, err := deploy.GetDeployedPackage("yamaalgolia",
 		"XXX")
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("Ouppsss %s", err)
 		return
 	}
 

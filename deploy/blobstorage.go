@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
-	"log"
 	"os"
 )
 
@@ -27,22 +26,22 @@ func isAlreadyDeployed(storageAccountName string) (string, error) {
 
 	credential, err := azblob.NewSharedKeyCredential(storageAccountName, accountKey)
 	if err != nil {
-		log.Fatal("Invalid credentials with error: " + err.Error())
+		return "", errors.New(fmt.Sprintf("Invalid credentials with error: %s", err.Error()))
 	}
 
 	serviceClient, err := azblob.NewServiceClientWithSharedKey(fmt.Sprintf("https://%s.blob.core.windows.net/", storageAccountName), credential, nil)
 	if err != nil {
-		log.Fatal("Invalid credentials with error: " + err.Error())
+		return "", errors.New(fmt.Sprintf("Invalid credentials with error: %s", err.Error()))
 	}
 
 	client, err := serviceClient.NewContainerClient(containerWeb)
 	if err != nil {
-		log.Fatalf("Unable to create a client on %s container", containerWeb)
+		return "", errors.New(fmt.Sprintf("Unable to create a client on %s container with error: %s", containerWeb, err.Error()))
 	}
 
 	_, err = client.GetProperties(ctx, nil)
 	if err != nil {
-		log.Fatalf("Error when fetching properties on the storage account %s with the following error \n %v ", containerWeb, err)
+		return "", errors.New(fmt.Sprintf("Error when fetching properties on the storage account %s with the following error \n %v ", containerWeb, err.Error()))
 	}
 
 	pager := client.ListBlobsFlat(&azblob.ContainerListBlobsFlatOptions{
